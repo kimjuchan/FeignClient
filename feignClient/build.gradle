@@ -1,0 +1,57 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.3'
+	id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'co.kr'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+
+/**
+ * feign client 사용을 위한 스프링클라우드 설정 필요
+ */
+/*ext{
+	set('springCloudVersion' , "2023.0.0")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}*/
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'com.h2database:h2'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	//참조 사이트 : https://velog.io/@jinvivid/%ED%8A%B8%EB%9F%AC%EB%B8%94%EC%8A%88%ED%8C%85%EC%8A%A4%ED%94%84%EB%A7%81-FeignClient-%EC%A0%81%EC%9A%A9
+	//Spring boot 3.2.x 부터는 호환 문제로 spring cloud version 2023.0.x 써줘야함  (그 아래 버전 사용하면 오류 발생.)
+	implementation platform("org.springframework.cloud:spring-cloud-dependencies:2023.0.0")
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
